@@ -1,0 +1,13 @@
+<launch>
+    <!-- <rosparam file="$(find data_preprocess)/config/camera.yaml" command="load"/> -->
+    <param name="intrinsic_path" value="$(find data_preprocess)/config/intrinsic_uisee_hesai.txt" />  <!-- intrinsic file -->
+    <param name="extrinsic_path" value="$(find data_preprocess)/config/extrinsic_uisee_hesai.txt" />  <!-- extrinsic file -->
+    <param name="threshold_lidar" type="int" value="24000" />  <!-- the maximum points shown on the photo -->
+
+    <node pkg="data_preprocess" type="uisee_hesai_to_depth" name="uisee_hesai_to_depth" respawn="true" output="screen" /> 
+    <node pkg="data_preprocess" type="livox_repub" name="livox_repub" output="screen" />
+    <node pkg="data_preprocess" type="imu_process" name="imu_process" output="screen" ></node>
+    <node pkg="image_transport" type="republish" name="image_republish" args="compressed in:=/camera/image_raw raw out:=/camera/image_raw" output="screen" respawn="true"/>
+</launch>
+
+

@@ -1,0 +1,13 @@
+<launch>
+    <!-- <rosparam file="$(find pointcloud_projection)/config/camera.yaml" command="load"/> -->
+    <param name="intrinsic_path" value="$(find pointcloud_projection)/config/intrinsic_neu_avia_mynteye.txt" />  <!-- intrinsic file -->
+    <param name="extrinsic_path" value="$(find pointcloud_projection)/config/extrinsic_neu_avia_mynteye.txt" />  <!-- extrinsic file -->
+    <param name="threshold_lidar" type="int" value="24000" />  <!-- the maximum points shown on the photo -->
+
+    <node pkg="pointcloud_projection" type="pointcloud_projection_neu_avia_mynteye" name="pointcloud_projection_neu_avia_mynteye" respawn="true" output="screen" /> 
+    <node pkg="pointcloud_projection" type="livox_repub" name="livox_repub" output="screen" />
+    <node pkg="pointcloud_projection" type="imu_process" name="imu_process" output="screen" >
+        <remap from="/imu" to="/livox/imu"/>
+    </node>
+    <node pkg="image_transport" type="republish" name="image_republish" args="compressed in:=/mynteye/left/image_raw raw out:=/mynteye/left/image_raw" output="screen" respawn="true"/>
+</launch>
